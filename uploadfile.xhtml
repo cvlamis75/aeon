@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/resources/templates/loginTemplate.xhtml">
+        <ui:define name="windowTitle">#{msgs.submissionTitle}</ui:define>
+
+        <ui:define name="heading"/>
+
+        <ui:define name="content">
+            <f:event type="preRenderView" listener="#{uploadBean.initCheckPage()}" />
+
+
+            <h:form enctype="multipart/form-data" acceptcharset="ISO-8859-7" id="dsds">
+
+                <p:panel header="Επιλογή Αρχείου προς Υποβολή">
+                    <p:fileUpload mode="advanced" 
+                                  fileUploadListener="#{uploadBean.submit}"
+                                  requiredMessage="Επιλέξτε αρχείο προς Υποβολή" 
+                                  label="Επιλογή"
+                                  uploadLabel="Ανέβασμα"
+                                  onstart="idleDialog2.show()"
+                                  cancelLabel="Ακύρωση"                                  
+                                  update="dsds"/>
+
+
+                    <h:panelGrid id="panelButtonID" columns="2">                                              
+                        <p:commandButton id="backButtonID" value="#{msgs.back}" action="#{uploadBean.backBtn}"  update="backButtonID,panelButtonID"/>
+                    </h:panelGrid>
+
+                </p:panel>
+
+                <p:spacer width="20px"/>
+
+                <h:panelGrid><p:messages id="msgs"/></h:panelGrid>
+
+                <p:spacer height="130px"/>
+
+                <p:panel id="userInstructions" header="#{msgs.instructions}" >
+                    <div class="tip">
+                        <p>Προσωρινή Φύλαξη (Upload)</p>
+                        <p>Η λειτουργία Προσωρινής Φύλαξης σας επιτρέπει να ανεβάσετε (να κάνετε upload) ένα αρχείο ΑΠΔ, η γραμμογράφηση του οποίου πρέπει να είναι σύμφωνη με τις <strong> Τεχνικές Προδιαγραφές ΑΠΔ.</strong>
+                            Κάντε κλικ στο κουμπί <strong>+ Επιλογή </strong>για να επιλέξετε το αρχείο (CSL01 ή CSC01) από τον υπολογιστή σας και μετά πατήστε το κουμπί <strong>Ανέβασμα</strong>.</p>
+                        <p>Η διαδικασία φόρτωσης ολοκληρώνεται αφού πάρετε το σχετικό μήνυμα στο γαλάζιο πλαίσιο στο κάτω μέρος αυτής της οθόνης. Ενδέχεται να υπάρχει ένας μικρός χρόνος αναμονής για την ολοκλήρωση της διαδικασίας, ανάλογα με το μέγεθος του αρχείου και τα χαρακτηριστικά της σύνδεσή σας (ενδεικτικός χρόνος φόρτωσης αρχείου με 500 εγγραφές: 15'').</p>
+                        <p>Τέλος, επιστρέψτε στην οθόνη <strong>Ενέργειες</strong> και επιλέξτε <strong>Έλεγχος Υποβολής</strong> για να υποβάλλετε το αρχείο προς έλεγχο ορθότητας.</p>
+                    </div>
+                </p:panel>
+
+                <p:idleMonitor timeout="850000" onidle="idleDialog.show();" />
+
+                <p:dialog header="#{msgs.systemNotice}" resizable="false"
+                          widgetVar="idleDialog" modal="true" width="300" closable="false">
+                    <h:panelGrid columns="1" cellpadding="5" style="text-align: center">
+                        <h:outputText value="#{msgs.expired1}" />
+                        <h:outputText value="#{msgs.expired2}" />
+                        <p:commandButton value="#{msgs.close}" action="index" ajax="false" immediate="true"/>
+                    </h:panelGrid>
+                </p:dialog>
+
+                <p:dialog header="#{msgs.systemNotice}" resizable="false"
+                          widgetVar="idleDialog2" modal="true" width="300" closable="false">
+                    <h:panelGrid columns="1" cellpadding="5" style="text-align: center">
+                        <h:outputText value="Η διαδικασία Προσωρινής Φόρτωσης του Αρχείου ξεκίνησε, παρακαλώ περιμένετε το μήνυμα ολοκλήρωσης" />
+                        <p:commandButton value="#{msgs.close}" onclick="idleDialog2.hide();" immediate="true"/>
+                    </h:panelGrid>
+                </p:dialog>
+
+
+
+
+
+            </h:form>
+
+
+        </ui:define>
+
+        <ui:define name="bottom"/>
+
+    </ui:composition>
+</html>
